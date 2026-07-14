@@ -52,9 +52,14 @@ html, body, [class*="st-"], .stMarkdown, button, input, label {
 .ticket .thead { display:flex; justify-content:space-between;
                  margin-bottom:.55rem; font-size:.9rem; }
 .ticket .size { color:#ffb300; font-weight:700; }
-.leg { display:flex; justify-content:space-between; padding:.28rem 0;
-       border-top:1px dashed #222; font-size:.85rem; color:#d8d8d8; }
+.leg { display:flex; justify-content:space-between; align-items:center;
+       padding:.45rem 0; border-top:1px dashed #222; font-size:.92rem; color:#e6e6e6; }
 .leg .note { color:#6f6f6f; font-size:.72rem; }
+.act { display:inline-block; min-width:3.6rem; text-align:center;
+       font-size:.86rem; font-weight:800; letter-spacing:.09em;
+       padding:.26rem .6rem; border-radius:5px; margin-right:.7rem; }
+.act.buy  { color:#06140c; background:#3ddc84; }
+.act.sell { color:#1c0709; background:#ff5f6b; }
 .zrow { display:flex; align-items:center; gap:.6rem; margin-top:.55rem;
         font-size:.7rem; color:#7a7a7a; }
 .zbar { flex:1; height:6px; background:#1d1d1d; border-radius:3px; }
@@ -226,9 +231,9 @@ def zbar_html(label, z):
             f"<span class='zval'>{z:+.2f}</span></div>")
 
 def leg_html(action, text, price, note=""):
-    cls = "c-green" if action == "BUY" else "c-red"
+    a = "buy" if action == "BUY" else "sell"
     note_html = f" <span class='note'>{note}</span>" if note else ""
-    return (f"<div class='leg'><span><span class='chip {cls}'>{action}</span> "
+    return (f"<div class='leg'><span><span class='act {a}'>{action}</span>"
             f"{text}{note_html}</span><span>{price}</span></div>")
 
 def conv_html(z):
