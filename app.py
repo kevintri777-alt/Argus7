@@ -11,7 +11,7 @@ from sklearn.model_selection import TimeSeriesSplit
 
 st.set_page_config(page_title="ARGUS // VOL_LAB", layout="wide")
 
-# ---------------- terminal skin ----------------
+# page styling
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap');
@@ -86,7 +86,7 @@ html, body, [class*="st-"], .stMarkdown, button, input, label {
 </style>
 """, unsafe_allow_html=True)
 
-# ---------------- data / model (unchanged logic) ----------------
+# data + model
 FILES = {Path(f).stem.split("_")[0].upper(): f
          for f in glob.glob("data/features/*_features.parquet")}
 if not FILES:
@@ -159,7 +159,7 @@ def forecast_stats(path):
     return df[["date", "forecast", "fwd_rv_21", "f_lo", "f_hi"]], \
         float(np.mean(corrs)), mape_model, mape_lazy
 
-# ---------------- controls ----------------
+# controls
 c_tk, c_dt, c_gap = st.columns([2, 1, 2])
 with c_tk:
     ticker = st.radio("SYMBOL", sorted(FILES), horizontal=True)
@@ -187,7 +187,7 @@ reg = regime_of(fc)
 size_mult = {"calm": 1.0, "normal": 1.0, "stressed": 0.5}[reg]
 S = row["c"]
 
-# ---------------- status bar + header ----------------
+# status bar + header
 st.markdown(
     f"<div class='statusbar'><span>&#9679; <b>ARGUS</b> v1.0 &nbsp; "
     f"&gt; run vol.lab --symbol {ticker} --asof {row['date'].date()}</span>"
@@ -200,7 +200,7 @@ st.markdown(
     f"spot <b style='color:#14181c'>{S:.2f}</b></span></div>",
     unsafe_allow_html=True)
 
-# ---------------- stat cards ----------------
+# stat cards
 lvl = ("OPTIONS RICH" if edge < -0.05 else
        "OPTIONS CHEAP" if edge > 0.05 else "FAIRLY PRICED")
 edge_cls = "c-red" if edge < -0.05 else ("c-green" if edge > 0.05 else "c-amber")
@@ -240,7 +240,6 @@ def conv_html(z):
     return ("<span class='chip c-green' style='margin-left:.4rem'>HIGH CONVICTION</span>"
             if abs(z) > ZHIGH else "")
 
-# ================= VOL_LAB =================
 with tab_decide:
     left, right = st.columns([1, 2.2])
 
@@ -330,7 +329,6 @@ with tab_decide:
                     ,
                     unsafe_allow_html=True)
 
-# ================= FORECAST =================
 with tab_forecast:
     fdf, wf_corr, mape_m, mape_l = forecast_stats(FILES[ticker])
     st.markdown(f"""
@@ -372,7 +370,6 @@ with tab_forecast:
     st.markdown(f"<div class='footline'>learned weights: {wtxt}</div>",
                 unsafe_allow_html=True)
 
-# ================= TRACK_RECORD =================
 with tab_record:
     tr = track_record(FILES[ticker])
     if tr.empty:
@@ -406,7 +403,6 @@ with tab_record:
             st.dataframe(tr, use_container_width=True, hide_index=True,
                          height=380)
 
-# ================= MODEL_LAB =================
 with tab_lab:
     st.markdown("<div class='aboutbox'><h4>// model tournament — how the "
                 "forecaster was chosen</h4>"
@@ -461,7 +457,6 @@ with tab_lab:
         "pre-cost; the cost-aware backtest shows bid-ask spreads absorb the "
         "edge at retail execution.</div>", unsafe_allow_html=True)
 
-# ================= HISTORY =================
 with tab_history:
     hist = full[["date", "rv_21", "atm_iv"]].dropna().copy()
     hist["regime"] = hist["rv_21"].apply(regime_of)
@@ -492,7 +487,6 @@ with tab_history:
     st.caption("Cyan = implied vol (market's expectation). Amber = realized vol "
                "(what happened). Background = regime; dashed line = selected date.")
 
-# ================= ABOUT =================
 with tab_about:
     a, b = st.columns(2)
     with a:
