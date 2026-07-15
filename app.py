@@ -20,68 +20,68 @@ html, body, [class*="st-"], .stMarkdown, button, input, label {
 }
 .block-container { max-width: 1500px; padding-top: 0.8rem; }
 .statusbar {
-    display:flex; justify-content:space-between; background:#000;
-    border:1px solid #262626; border-radius:6px; padding:.45rem .9rem;
-    font-size:.75rem; color:#9a9a9a; margin-bottom:.8rem;
+    display:flex; justify-content:space-between; background:#f4f6f7;
+    border:1px solid #e2e6ea; border-radius:6px; padding:.45rem .9rem;
+    font-size:.75rem; color:#5b656d; margin-bottom:.8rem;
 }
-.statusbar b { color:#ffb300; }
+.statusbar b { color:#a86400; }
 .bighead { font-size:1.9rem; font-weight:800; margin:.2rem 0 .6rem 0; }
-.bighead .sym { color:#fff; } .bighead .sep { color:#555; }
-.bighead .dt  { color:#ffb300; }
+.bighead .sym { color:#14181c; } .bighead .sep { color:#b8c0c6; }
+.bighead .dt  { color:#a86400; }
 .statgrid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:.8rem; }
 .statcard {
-    background:#101010; border:1px solid #2a2a2a; border-radius:8px;
-    padding:.7rem 1rem .8rem 1rem;
+    background:#ffffff; border:1px solid #e2e6ea; border-radius:8px;
+    padding:.7rem 1rem .8rem 1rem; box-shadow:0 1px 2px rgba(20,24,28,.04);
 }
-.statcard .lbl { font-size:.68rem; letter-spacing:.12em; color:#7a7a7a;
+.statcard .lbl { font-size:.68rem; letter-spacing:.12em; color:#78828a;
                  text-transform:uppercase; }
 .statcard .val { font-size:2.1rem; font-weight:800; line-height:1.15; }
-.v-white{color:#f2f2f2}.v-cyan{color:#39d8e8}.v-green{color:#3ddc84}
-.v-amber{color:#ffb300}.v-red{color:#ff5f6b}
+.v-white{color:#14181c}.v-cyan{color:#0e7c8b}.v-green{color:#12925a}
+.v-amber{color:#a86400}.v-red{color:#c0392f}
 .chip { display:inline-block; font-size:.66rem; font-weight:700;
         padding:.1rem .5rem; border-radius:4px; margin-top:.35rem;
         border:1px solid; }
-.c-green{ color:#3ddc84; border-color:#3ddc84; background:#0d2417; }
-.c-red  { color:#ff5f6b; border-color:#ff5f6b; background:#2a1214; }
-.c-amber{ color:#ffb300; border-color:#ffb300; background:#241c08; }
-.c-cyan { color:#39d8e8; border-color:#39d8e8; background:#08222a; }
+.c-green{ color:#12925a; border-color:#9fe0bd; background:#e7f7ee; }
+.c-red  { color:#c0392f; border-color:#f0b8b3; background:#fcece9; }
+.c-amber{ color:#a86400; border-color:#ecd39c; background:#fbf3e2; }
+.c-cyan { color:#0e7c8b; border-color:#a8dde6; background:#e6f6f9; }
 .ticket {
-    background:#101010; border:1px solid #2a2a2a; border-radius:8px;
-    padding:.8rem 1rem; margin-bottom:.8rem;
+    background:#ffffff; border:1px solid #e2e6ea; border-radius:8px;
+    padding:.8rem 1rem; margin-bottom:.8rem; box-shadow:0 1px 2px rgba(20,24,28,.04);
 }
 .ticket .thead { display:flex; justify-content:space-between;
                  margin-bottom:.55rem; font-size:.9rem; }
-.ticket .size { color:#ffb300; font-weight:700; }
+.ticket .size { color:#a86400; font-weight:700; }
 .leg { display:flex; justify-content:space-between; align-items:center;
-       padding:.45rem 0; border-top:1px dashed #222; font-size:.92rem; color:#e6e6e6; }
-.leg .note { color:#6f6f6f; font-size:.72rem; }
+       padding:.45rem 0; border-top:1px dashed #e2e6ea; font-size:.92rem; color:#2a2f34; }
+.leg .note { color:#808a91; font-size:.72rem; }
 .act { display:inline-block; min-width:3.6rem; text-align:center;
        font-size:.86rem; font-weight:800; letter-spacing:.09em;
        padding:.26rem .6rem; border-radius:5px; margin-right:.7rem; }
-.act.buy  { color:#06140c; background:#3ddc84; }
-.act.sell { color:#1c0709; background:#ff5f6b; }
+.act.buy  { color:#ffffff; background:#17a35a; }
+.act.sell { color:#ffffff; background:#d23b46; }
 .zrow { display:flex; align-items:center; gap:.6rem; margin-top:.55rem;
-        font-size:.7rem; color:#7a7a7a; }
-.zbar { flex:1; height:6px; background:#1d1d1d; border-radius:3px; }
-.zfill{ height:6px; background:#ffb300; border-radius:3px; }
-.zval { color:#ffb300; font-weight:700; }
-.bandwrap { background:#101010; border:1px solid #2a2a2a; border-radius:8px;
-            padding:.7rem 1rem; }
-.bandlbl { font-size:.68rem; letter-spacing:.12em; color:#7a7a7a;
+        font-size:.7rem; color:#78828a; }
+.zbar { flex:1; height:6px; background:#e6e9ec; border-radius:3px; }
+.zfill{ height:6px; background:#c07d00; border-radius:3px; }
+.zval { color:#a86400; font-weight:700; }
+.bandwrap { background:#ffffff; border:1px solid #e2e6ea; border-radius:8px;
+            padding:.7rem 1rem; box-shadow:0 1px 2px rgba(20,24,28,.04); }
+.bandlbl { font-size:.68rem; letter-spacing:.12em; color:#78828a;
            text-transform:uppercase; margin-bottom:.5rem; }
 .band { display:flex; height:20px; border-radius:4px; overflow:hidden;
-        font-size:.62rem; font-weight:700; text-align:center; color:#0a0a0a; }
+        font-size:.62rem; font-weight:700; text-align:center; color:#14181c; }
 .band div { display:flex; align-items:center; justify-content:center; }
 .cuts { display:flex; justify-content:space-between; font-size:.66rem;
-        color:#6f6f6f; margin-top:.3rem; }
-.footline { font-size:.72rem; color:#6f6f6f; border-top:1px solid #222;
+        color:#808a91; margin-top:.3rem; }
+.footline { font-size:.72rem; color:#808a91; border-top:1px solid #e2e6ea;
             padding-top:.5rem; margin-top:.6rem; }
-.notrade { background:#101010; border:1px solid #2a2a2a; border-radius:8px;
-           padding:1.2rem; color:#9a9a9a; font-size:.9rem; }
-.aboutbox { background:#101010; border:1px solid #2a2a2a; border-radius:8px;
+.notrade { background:#ffffff; border:1px solid #e2e6ea; border-radius:8px;
+           padding:1.2rem; color:#5b656d; font-size:.9rem; }
+.aboutbox { background:#ffffff; border:1px solid #e2e6ea; border-radius:8px;
             padding:1rem 1.2rem; margin-bottom:.8rem; font-size:.86rem;
-            line-height:1.55; color:#cfcfcf; }
-.aboutbox h4 { color:#ffb300; font-size:.8rem; letter-spacing:.12em;
+            line-height:1.55; color:#3a4046; box-shadow:0 1px 2px rgba(20,24,28,.04); }
+.aboutbox h4 { color:#a86400; font-size:.8rem; letter-spacing:.12em;
                text-transform:uppercase; margin:0 0 .4rem 0; }
 </style>
 """, unsafe_allow_html=True)
@@ -196,8 +196,8 @@ st.markdown(
 st.markdown(
     f"<div class='bighead'><span class='sym'>{ticker}</span> "
     f"<span class='sep'>//</span> <span class='dt'>{row['date'].date()}</span>"
-    f"<span style='float:right;font-size:1rem;color:#9a9a9a;padding-top:.6rem'>"
-    f"spot <b style='color:#fff'>{S:.2f}</b></span></div>",
+    f"<span style='float:right;font-size:1rem;color:#5b656d;padding-top:.6rem'>"
+    f"spot <b style='color:#14181c'>{S:.2f}</b></span></div>",
     unsafe_allow_html=True)
 
 # ---------------- stat cards ----------------
@@ -231,9 +231,9 @@ def zbar_html(label, z):
             f"<span class='zval'>{z:+.2f}</span></div>")
 
 def leg_html(action, text, price, note=""):
-    a = "buy" if action == "BUY" else "sell"
+    cls = "c-green" if action == "BUY" else "c-red"
     note_html = f" <span class='note'>{note}</span>" if note else ""
-    return (f"<div class='leg'><span><span class='act {a}'>{action}</span>"
+    return (f"<div class='leg'><span><span class='chip {cls}'>{action}</span> "
             f"{text}{note_html}</span><span>{price}</span></div>")
 
 def conv_html(z):
@@ -299,7 +299,7 @@ with tab_decide:
         """, unsafe_allow_html=True)
 
     with right:
-        st.markdown("<div style='font-size:.72rem;color:#39d8e8;"
+        st.markdown("<div style='font-size:.72rem;color:#0e7c8b;"
                     "letter-spacing:.1em'>VOL_HISTORY // IV_ATM vs RV_21D</div>",
                     unsafe_allow_html=True)
         hist = full[["date", "rv_21", "atm_iv"]].dropna().copy()
@@ -310,24 +310,24 @@ with tab_decide:
             y=alt.Y("vol:Q", title=None),
             color=alt.Color("series:N",
                             scale=alt.Scale(domain=["atm_iv", "rv_21"],
-                                            range=["#39d8e8", "#ffb300"]),
+                                            range=["#0e8296", "#c07d00"]),
                             legend=alt.Legend(title="", orient="top-right",
                                               labelExpr="datum.value == 'atm_iv' "
                                               "? 'implied vol (ATM)' "
                                               ": 'realized vol (21d)'")),
         ).properties(height=430)
         pin = alt.Chart(pd.DataFrame({"date": [row["date"]]})).mark_rule(
-            strokeWidth=1.5, strokeDash=[5, 4], color="#e8e8e8"
+            strokeWidth=1.5, strokeDash=[5, 4], color="#6b7278"
         ).encode(x="date:T")
         st.altair_chart((lines + pin).configure_view(stroke=None)
-                        .configure_axis(gridColor="#1c1c1c", labelColor="#8a8a8a",
-                                        domainColor="#333"),
+                        .configure_axis(gridColor="#e6e9ec", labelColor="#5b656d",
+                                        domainColor="#cfd6da"),
                         use_container_width=True)
         st.markdown(f"<div class='footline'>z_term {row['z_term']:+.2f} &nbsp;|&nbsp; "
                     f"z_skew {row['z_skew']:+.2f} &nbsp;|&nbsp; spot {S:.2f} "
                     f"&nbsp;|&nbsp; regimes: calm&lt;{REGIME_LO:.0%}"
                     f"&lt;normal&lt;{REGIME_HI:.0%}&lt;stressed &nbsp;|&nbsp; "
-                    f"research only — paper-trade</div>",
+                    ,
                     unsafe_allow_html=True)
 
 # ================= FORECAST =================
@@ -346,7 +346,7 @@ with tab_forecast:
     </div>""", unsafe_allow_html=True)
     st.caption("Accuracy = 100% minus the average % miss. The lazy baseline "
                "guesses 'next month = last month'. The edge is the gap.")
-    band = alt.Chart(fdf).mark_area(opacity=0.14, color="#ffb300").encode(
+    band = alt.Chart(fdf).mark_area(opacity=0.16, color="#c07d00").encode(
         x=alt.X("date:T", title=None), y=alt.Y("f_lo:Q", title="21d vol"),
         y2="f_hi:Q")
     lines = alt.Chart(
@@ -355,15 +355,15 @@ with tab_forecast:
         x=alt.X("date:T", title=None), y=alt.Y("vol:Q", title="21d vol"),
         color=alt.Color("series:N",
                         scale=alt.Scale(domain=["fwd_rv_21", "forecast"],
-                                        range=["#39d8e8", "#ffb300"]),
+                                        range=["#0e8296", "#c07d00"]),
                         legend=alt.Legend(title="", orient="top-right",
                                           labelExpr="datum.value == 'forecast' "
                                           "? 'model forecast' "
                                           ": 'realized (what happened)'")),
     ).properties(height=400)
     st.altair_chart((band + lines).configure_view(stroke=None)
-                    .configure_axis(gridColor="#1c1c1c", labelColor="#8a8a8a",
-                                    domainColor="#333"),
+                    .configure_axis(gridColor="#e6e9ec", labelColor="#5b656d",
+                                    domainColor="#cfd6da"),
                     use_container_width=True)
     st.caption("Shaded band = 10th–90th percentile quantile-regression forecast "
                "(probabilistic confidence, not a point guess).")
@@ -401,7 +401,7 @@ with tab_record:
                      .assign(cum=lambda x: x["P&L (vol pts)"].cumsum()))
             st.line_chart(cum.set_index("date")[["cum"]]
                           .rename(columns={"cum": "cumulative P&L (vol pts)"}),
-                          height=380, color="#ffb300")
+                          height=380, color="#c07d00")
         with right:
             st.dataframe(tr, use_container_width=True, hide_index=True,
                          height=380)
@@ -467,7 +467,7 @@ with tab_history:
     hist["regime"] = hist["rv_21"].apply(regime_of)
     hist["date2"] = hist["date"].shift(-1).fillna(hist["date"])
     ymax = float(max(hist["rv_21"].max(), hist["atm_iv"].max()) * 1.05)
-    bands = alt.Chart(hist).mark_rect(opacity=0.10).encode(
+    bands = alt.Chart(hist).mark_rect(opacity=0.16).encode(
         x="date:T", x2="date2:T", y=alt.datum(0), y2=alt.datum(ymax),
         color=alt.Color("regime:N",
                         scale=alt.Scale(domain=["calm", "normal", "stressed"],
@@ -480,14 +480,14 @@ with tab_history:
         x="date:T", y=alt.Y("vol:Q", title="annualized vol"),
         color=alt.Color("series:N",
                         scale=alt.Scale(domain=["atm_iv", "rv_21"],
-                                        range=["#39d8e8", "#ffb300"]),
+                                        range=["#0e8296", "#c07d00"]),
                         legend=alt.Legend(title="")),
     )
     pin = alt.Chart(pd.DataFrame({"date": [row["date"]]})).mark_rule(
-        strokeWidth=1.5, strokeDash=[5, 4], color="#e8e8e8").encode(x="date:T")
+        strokeWidth=1.5, strokeDash=[5, 4], color="#6b7278").encode(x="date:T")
     st.altair_chart((bands + lines + pin).configure_view(stroke=None)
-                    .configure_axis(gridColor="#1c1c1c", labelColor="#8a8a8a",
-                                    domainColor="#333"),
+                    .configure_axis(gridColor="#e6e9ec", labelColor="#5b656d",
+                                    domainColor="#cfd6da"),
                     use_container_width=True)
     st.caption("Cyan = implied vol (market's expectation). Amber = realized vol "
                "(what happened). Background = regime; dashed line = selected date.")
