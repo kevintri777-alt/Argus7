@@ -189,8 +189,7 @@ S = row["c"]
 
 # ---------------- status bar + header ----------------
 st.markdown(
-    f"<div class='statusbar'><span>&#9679; <b>ARGUS</b> v1.0 &nbsp; "
-    f"&gt; run vol.lab --symbol {ticker} --asof {row['date'].date()}</span>"
+    
     f"<span>by Kevin Trivedi &amp; Vivan Jhaveri</span></div>",
     unsafe_allow_html=True)
 st.markdown(
@@ -231,9 +230,9 @@ def zbar_html(label, z):
             f"<span class='zval'>{z:+.2f}</span></div>")
 
 def leg_html(action, text, price, note=""):
-    a = "buy" if action == "BUY" else "sell"
+    cls = "c-green" if action == "BUY" else "c-red"
     note_html = f" <span class='note'>{note}</span>" if note else ""
-    return (f"<div class='leg'><span><span class='act {a}'>{action}</span>"
+    return (f"<div class='leg'><span><span class='chip {cls}'>{action}</span> "
             f"{text}{note_html}</span><span>{price}</span></div>")
 
 def conv_html(z):
@@ -327,7 +326,7 @@ with tab_decide:
                     f"z_skew {row['z_skew']:+.2f} &nbsp;|&nbsp; spot {S:.2f} "
                     f"&nbsp;|&nbsp; regimes: calm&lt;{REGIME_LO:.0%}"
                     f"&lt;normal&lt;{REGIME_HI:.0%}&lt;stressed &nbsp;|&nbsp; "
-                    f"research only — paper-trade</div>",
+                    ,
                     unsafe_allow_html=True)
 
 # ================= FORECAST =================
