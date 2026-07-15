@@ -189,7 +189,8 @@ S = row["c"]
 
 # ---------------- status bar + header ----------------
 st.markdown(
-    
+    f"<div class='statusbar'><span>&#9679; <b>ARGUS</b> v1.0 &nbsp; "
+    f"&gt; run vol.lab --symbol {ticker} --asof {row['date'].date()}</span>"
     f"<span>by Kevin Trivedi &amp; Vivan Jhaveri</span></div>",
     unsafe_allow_html=True)
 st.markdown(
