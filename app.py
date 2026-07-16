@@ -6,8 +6,9 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 from scipy.stats import pearsonr
-from sklearn.linear_model import LinearRegression, QuantileRegressor
+from sklearn.linear_model import LinearRegression, LogisticRegression, QuantileRegressor
 from sklearn.model_selection import TimeSeriesSplit
+from sklearn.preprocessing import StandardScaler
 
 st.set_page_config(page_title="ARGUS // VOL_LAB", layout="wide")
 
@@ -97,6 +98,10 @@ ZWIN, ZCLIP, H = 60, 2.0, 21
 ZFIRE, ZHIGH = 1.5, 2.0          # fire ticket at |z|>1.5; flag |z|>2 as high-conviction
 HAR = ["rv_5", "rv_21", "rv_63", "atm_iv"]
 QLEVELS = [0.1, 0.5, 0.9]        # quantile-regression confidence band
+# model #2: the ML trade gate -- logistic classifier that scores each flagged
+# trade's P(win). Inputs below; label = pre-cost proxy P&L > 0.
+GATE_FEATS = ["abs_z", "is_skew", "iv_rank_252", "atm_iv", "vrp_now",
+              "rv_21", "put_call_ratio"]
 
 @st.cache_data
 def load(path):
@@ -159,11 +164,50 @@ def forecast_stats(path):
     return df[["date", "forecast", "fwd_rv_21", "f_lo", "f_hi"]], \
         float(np.mean(corrs)), mape_model, mape_lazy
 
+@st.cache_data
+def gate_for(path):
+    """Model #2: supervised logistic 'trade gate'. Trains on this ticker's
+    non-overlapping z-score trades (label = pre-cost proxy P&L > 0) and returns
+    a (scaler, model, n, base_win_rate) tuple, or None if too little to learn."""
+    full, _, _, _, _ = load(path)
+    rows = []
+    for src, name in [("iv_term_slope", "TERM"), ("iv_skew", "SKEW")]:
+        s, z = full[src], full["z_term" if name == "TERM" else "z_skew"]
+        fut = s.shift(-H) - s
+        for i in range(ZWIN, len(full) - H, H):
+            zi, fi = z.iloc[i], fut.iloc[i]
+            r = full.iloc[i]
+            feats = [abs(zi), 1.0 if name == "SKEW" else 0.0, r["iv_rank_252"],
+                     r["atm_iv"], r["vrp_now"], r["rv_21"], r["put_call_ratio"]]
+            if not np.isfinite(zi) or not np.isfinite(fi) or not np.all(np.isfinite(feats)):
+                continue
+            pnl = -np.clip(zi, -ZCLIP, ZCLIP) * fi
+            rows.append(feats + [1 if pnl > 0 else 0])
+    if len(rows) < 12:
+        return None
+    arr = np.asarray(rows, float)
+    X, y = arr[:, :-1], arr[:, -1].astype(int)
+    if len(np.unique(y)) < 2:
+        return None
+    sc = StandardScaler().fit(X)
+    clf = LogisticRegression(C=0.3, max_iter=2000).fit(sc.transform(X), y)
+    return sc, clf, len(y), float(y.mean())
+
+def gate_pwin(gate, z, is_skew, r):
+    """P(win) for one flagged trade from model #2 (0.5 if the gate is untrained)."""
+    if gate is None:
+        return 0.5
+    sc, clf = gate[0], gate[1]
+    x = np.array([[abs(z), 1.0 if is_skew else 0.0, r["iv_rank_252"], r["atm_iv"],
+                   r["vrp_now"], r["rv_21"], r["put_call_ratio"]]])
+    return float(clf.predict_proba(sc.transform(x))[0, 1])
+
 # controls
 c_tk, c_dt, c_gap = st.columns([2, 1, 2])
 with c_tk:
     ticker = st.radio("SYMBOL", sorted(FILES), horizontal=True)
 full, W, REGIME_LO, REGIME_HI, QB = load(FILES[ticker])
+GATE = gate_for(FILES[ticker])   # model #2: the ML trade gate
 
 def regime_of(v):
     return "calm" if v < REGIME_LO else ("normal" if v < REGIME_HI else "stressed")
@@ -240,6 +284,16 @@ def conv_html(z):
     return ("<span class='chip c-green' style='margin-left:.4rem'>HIGH CONVICTION</span>"
             if abs(z) > ZHIGH else "")
 
+def gate_html(z, is_skew):
+    """Model #2 chip: the ML gate's P(win) and take/skip verdict for this trade."""
+    if GATE is None:
+        return ""
+    p = gate_pwin(GATE, z, is_skew, row)
+    cls = "c-green" if p > 0.6 else ("c-amber" if p >= 0.5 else "c-red")
+    verdict = "TAKE" if p > 0.6 else "SKIP"
+    return (f"<div class='zrow'><span>ML gate &middot; model #2</span>"
+            f"<span class='chip {cls}'>P(win) {p:.0%} &middot; {verdict}</span></div>")
+
 with tab_decide:
     left, right = st.columns([1, 2.2])
 
@@ -260,7 +314,8 @@ with tab_decide:
                 f"<span><span class='chip c-amber'>TERM</span> "
                 f"<b>calendar spread</b>{conv_html(z)}</span>"
                 f"<span class='size'>size {size}x</span></div>"
-                f"{legs}{zbar_html('z_term', z)}</div>", unsafe_allow_html=True)
+                f"{legs}{zbar_html('z_term', z)}{gate_html(z, False)}</div>",
+                unsafe_allow_html=True)
 
         z = row["z_skew"]
         if np.isfinite(z) and abs(z) > ZFIRE:
@@ -279,7 +334,8 @@ with tab_decide:
                 f"<span><span class='chip c-amber'>SKEW</span> "
                 f"<b>risk reversal</b>{conv_html(z)}</span>"
                 f"<span class='size'>size {size}x</span></div>"
-                f"{legs}{zbar_html('z_skew', z)}</div>", unsafe_allow_html=True)
+                f"{legs}{zbar_html('z_skew', z)}{gate_html(z, True)}</div>",
+                unsafe_allow_html=True)
 
         if not any_ticket:
             st.markdown("<div class='notrade'>NO TRADE — nothing dislocated "
@@ -446,6 +502,19 @@ with tab_lab:
         f"The same 4-feature model adapts its weights per ticker — see the "
         f"FORECAST tab footer for the learned values.</div>",
         unsafe_allow_html=True)
+    if GATE is not None:
+        st.markdown(
+            f"<div class='aboutbox'><h4>// model #2 — the ML trade gate</h4>"
+            f"A supervised <b>logistic-regression classifier</b> (the AI inside the "
+            f"trade decision) scores each rule-flagged trade's P(win) from 7 state "
+            f"features — |z|, IV-rank, ATM IV, VRP, realized vol, put/call ratio, and "
+            f"signal type. On {ticker} it trained on <b class='v-cyan'>{GATE[2]}</b> "
+            f"non-overlapping trades (base win rate {GATE[3]:.0%}); each VOL_LAB ticket "
+            f"shows its P(win) and TAKE/SKIP verdict. Honest status: pooled walk-forward "
+            f"(QQQ+AAPL, n=35) it does <b>not</b> yet beat the rules alone "
+            f"(Sharpe 0.38 vs 0.41) — built and tested, but it needs a larger sample "
+            f"to add value. The live gate is trained on the pre-cost proxy P&amp;L.</div>",
+            unsafe_allow_html=True)
     st.markdown(
         "<div class='aboutbox'><h4>// honest finding</h4>"
         "Simple beat complex at this data size (~1,000 days per ticker) — "
