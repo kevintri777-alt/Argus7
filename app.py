@@ -19,11 +19,12 @@ st.markdown("""
 html, body, [class*="st-"], .stMarkdown, button, input, label {
     font-family: 'JetBrains Mono', ui-monospace, monospace !important;
 }
-.block-container { max-width: 1500px; padding-top: 0.6rem; }
+.block-container { max-width: 1500px; padding-top: 3rem; }
 .brandbar { display:flex; align-items:center; justify-content:space-between;
     padding:.2rem .1rem .7rem; margin-bottom:.7rem; border-bottom:1px solid #20242b; }
-.brand { display:flex; align-items:center; gap:.7rem; }
-.brand svg { filter: drop-shadow(0 0 6px rgba(255,179,0,.35)); }
+.brand { display:flex; align-items:center; gap:.55rem; }
+.logo-eye { font-size:2rem; line-height:1; color:#ffb300;
+    text-shadow:0 0 10px rgba(255,179,0,.55); }
 .logo-word { font-size:1.6rem; font-weight:800; letter-spacing:.16em; color:#f4f4f5; }
 .logo-tag { font-size:.62rem; letter-spacing:.2em; text-transform:uppercase;
     color:#8b929c; border-left:1px solid #2b2f36; padding-left:.7rem; }
@@ -213,10 +214,7 @@ def gate_pwin(gate, z, is_skew, r):
 # brand / logo bar
 st.markdown(
     "<div class='brandbar'><div class='brand'>"
-    "<svg width='30' height='30' viewBox='0 0 48 48' fill='none'>"
-    "<ellipse cx='24' cy='24' rx='22' ry='12.5' stroke='#ffb300' stroke-width='2.4'/>"
-    "<circle cx='24' cy='24' r='7' fill='#ffb300'/>"
-    "<circle cx='24' cy='24' r='2.6' fill='#0a0b0d'/></svg>"
+    "<span class='logo-eye'>&#9673;</span>"
     "<span class='logo-word'>ARGUS</span>"
     "<span class='logo-tag'>AI-Powered Options Research</span></div>"
     "<span class='brand-by'>Kevin Trivedi &middot; Vivan Jhaveri</span></div>",
