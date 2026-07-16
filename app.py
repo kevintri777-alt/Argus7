@@ -251,8 +251,6 @@ S = row["c"]
 
 # status bar + header
 st.markdown(
-    f"<div class='statusbar'><span>&#9679; <b>ARGUS</b> v1.0 &nbsp; "
-    f"&gt; run vol.lab --symbol {ticker} --asof {row['date'].date()}</span>"
     f"<span>by Kevin Trivedi &amp; Vivan Jhaveri</span></div>",
     unsafe_allow_html=True)
 st.markdown(
@@ -478,11 +476,12 @@ with tab_record:
                          height=380)
 
 with tab_lab:
-    st.markdown("<div class='aboutbox'><h4>// model tournament — how the "
+    st.markdown("<div class='aboutbox'><h4>// model #1 tournament — how the "
                 "forecaster was chosen</h4>"
                 "Every candidate was built, trained, and evaluated under "
                 "walk-forward validation on TSLA (2019–2022). The winner runs "
-                "this app; the losers are kept here as evidence.</div>",
+                "this app; the losers are kept here as evidence. (Model #2, the "
+                "trade-selection gate, has its own tournament below.)</div>",
                 unsafe_allow_html=True)
     tourney = pd.DataFrame([
         {"model": "Transformer (encoder, 2 layers)", "features": 14,
@@ -522,17 +521,32 @@ with tab_lab:
         unsafe_allow_html=True)
     if GATE is not None:
         st.markdown(
-            f"<div class='aboutbox'><h4>// model #2 — the ML trade gate</h4>"
-            f"A supervised <b>logistic-regression classifier</b> (the AI inside the "
-            f"trade decision) scores each rule-flagged trade's P(win) from 7 state "
-            f"features — |z|, IV-rank, ATM IV, VRP, realized vol, put/call ratio, and "
-            f"signal type. On {ticker} it trained on <b class='v-cyan'>{GATE[2]}</b> "
-            f"non-overlapping trades (base win rate {GATE[3]:.0%}); each VOL_LAB ticket "
-            f"shows its P(win) and TAKE/SKIP verdict. Honest status: pooled walk-forward "
-            f"(QQQ+AAPL, n=35) it does <b>not</b> yet beat the rules alone "
-            f"(Sharpe 0.38 vs 0.41) — built and tested, but it needs a larger sample "
-            f"to add value. The live gate is trained on the pre-cost proxy P&amp;L.</div>",
+            "<div class='aboutbox'><h4>// model #2 — the trade-selection gate "
+            "(logistic classifier)</h4>"
+            "The AI inside the trade decision. After the rule flags a candidate "
+            "(|z|&gt;1.5), this supervised logistic-regression model scores its "
+            "probability of winning from 7 state features and takes it only if "
+            "P(win) &gt; 0.60 (shown on every ticket). Below is its own tournament: "
+            "the ML-filtered book versus taking every rule-flagged trade, pooled "
+            "walk-forward across QQQ+AAPL, post-cost with bootstrap 90% CIs.</div>",
             unsafe_allow_html=True)
+        gate_tourney = pd.DataFrame([
+            {"book": "Rules only (take all flagged)", "post-cost Sharpe": "+0.41",
+             "t": "+2.2", "90% CI": "[+0.11, +0.80]", "win": "75%", "n": 28,
+             "verdict": "baseline"},
+            {"book": "ML gate (P(win) > 0.60)", "post-cost Sharpe": "+0.38",
+             "t": "+2.0", "90% CI": "[+0.06, +0.77]", "win": "74%", "n": 27,
+             "verdict": "TESTED — no lift yet (small n)"},
+        ])
+        st.dataframe(gate_tourney, use_container_width=True, hide_index=True)
+        gw = pd.DataFrame({"feature": GATE_FEATS,
+                           "weight (std.)": np.round(GATE[1].coef_[0], 2)})
+        gw = gw.reindex(gw["weight (std.)"].abs().sort_values(ascending=False).index)
+        st.markdown(
+            f"<div class='footline'>What the gate learned on {ticker} "
+            f"(n={GATE[2]}, base win {GATE[3]:.0%}) &mdash; standardized logistic "
+            f"weights, positive raises P(win):</div>", unsafe_allow_html=True)
+        st.dataframe(gw, use_container_width=True, hide_index=True)
     st.markdown(
         "<div class='aboutbox'><h4>// honest finding</h4>"
         "Simple beat complex at this data size (~1,000 days per ticker) — "
